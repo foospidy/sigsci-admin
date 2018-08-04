@@ -4,6 +4,10 @@
 
 https://sigsci-admin.herokuapp.com
 
+### Install Local
+
+`$ make env`
+
 ### Run Local
 
-tbd
+`$ make run-local`
