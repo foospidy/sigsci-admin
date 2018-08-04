@@ -1,5 +1,4 @@
-# sigsci-admin
-Signal Sciences Admin Tool
+# Signal Sciences Admin Tool
 
 ### Hosted
 
