@@ -4,7 +4,13 @@ import requests
 from pysigsci import sigsciapi
 
 app = Flask(__name__, static_url_path='/static')
-app.secret_key = open("/dev/random","rb").read(32)
+
+secret_key = os.environ.get('FLASK_SECRET_KEY', None)
+
+if secret_key is not None:
+    app.secret_key = os.environ['FLASK_SECRET_KEY']
+else:
+    app.secret_key = open("/dev/random","rb").read(32)
 
 
 @app.route('/corp_sites', methods=['GET'])
