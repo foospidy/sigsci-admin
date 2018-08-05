@@ -237,6 +237,11 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.route('/logo.png')
+def logo():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'sigsci-black.png', mimetype='image/png')
+
 @app.route('/site')
 def site():
     if 'username' not in session:
