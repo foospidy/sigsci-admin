@@ -232,6 +232,11 @@ def default():
     javascript = 'get_corp_sites();'
     return render_template('index.html', javascript=javascript)
 
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 @app.route('/site')
 def site():
     if 'username' not in session:
