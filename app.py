@@ -208,6 +208,7 @@ def login():
         user = sigsci.get_corp_user(email)
         
         if 'message' in user:
+            print(user['message'])
             abort(403)
         else:
             session['username'] = email
