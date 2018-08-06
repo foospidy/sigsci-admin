@@ -1,20 +1,26 @@
+"""
+Admin Tool for Signal Sciences
+"""
 import os
-from flask import Flask, session, render_template, request, redirect, url_for, send_from_directory, abort, jsonify
-import requests
+from flask import Flask, session, render_template, request, \
+                  redirect, url_for, send_from_directory, abort, jsonify
 from pysigsci import sigsciapi
 
-app = Flask(__name__, static_url_path='/static')
+APP = Flask(__name__, static_url_path='/static')
 
-secret_key = os.environ.get('FLASK_SECRET_KEY', None)
+SECRET_KEY = os.environ.get('FLASK_SECRET_KEY', None)
 
-if secret_key is not None:
-    app.secret_key = os.environ['FLASK_SECRET_KEY']
+if SECRET_KEY is not None:
+    APP.secret_key = os.environ['FLASK_SECRET_KEY']
 else:
-    app.secret_key = open("/dev/random","rb").read(32)
+    APP.secret_key = open("/dev/random", "rb").read(32)
 
 
-@app.route('/corp_sites', methods=['GET'])
+@APP.route('/corp_sites', methods=['GET'])
 def get_corp_sites():
+    """
+    Return list of corp sites from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -28,8 +34,11 @@ def get_corp_sites():
 
     return jsonify(response)
 
-@app.route('/request_rules', methods=['GET'])
+@APP.route('/request_rules', methods=['GET'])
 def get_request_rules():
+    """
+    Return request rules from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -44,8 +53,11 @@ def get_request_rules():
 
     return jsonify(response)
 
-@app.route('/signal_rules', methods=['GET'])
+@APP.route('/signal_rules', methods=['GET'])
 def get_signal_rules():
+    """
+    Return signal rules from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -60,8 +72,11 @@ def get_signal_rules():
 
     return jsonify(response)
 
-@app.route('/templated_rules', methods=['GET'])
+@APP.route('/templated_rules', methods=['GET'])
 def get_templated_rules():
+    """
+    Return templated rules from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -76,8 +91,11 @@ def get_templated_rules():
 
     return jsonify(response)
 
-@app.route('/advanced_rules', methods=['GET'])
+@APP.route('/advanced_rules', methods=['GET'])
 def get_advanced_rules():
+    """
+    Return advanced rules from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -92,8 +110,11 @@ def get_advanced_rules():
 
     return jsonify(response)
 
-@app.route('/rule_lists', methods=['GET'])
+@APP.route('/rule_lists', methods=['GET'])
 def get_rule_lists():
+    """
+    Return rule lists from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -108,8 +129,11 @@ def get_rule_lists():
 
     return jsonify(response)
 
-@app.route('/custom_signals', methods=['GET'])
+@APP.route('/custom_signals', methods=['GET'])
 def get_custom_signals():
+    """
+    Return custom signals from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -124,8 +148,11 @@ def get_custom_signals():
 
     return jsonify(response)
 
-@app.route('/custom_alerts', methods=['GET'])
+@APP.route('/custom_alerts', methods=['GET'])
 def get_custom_alerts():
+    """
+    Return custom alerts from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -140,8 +167,11 @@ def get_custom_alerts():
 
     return jsonify(response)
 
-@app.route('/redactions', methods=['GET'])
+@APP.route('/redactions', methods=['GET'])
 def get_redactions():
+    """
+    Return redactions from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -156,8 +186,11 @@ def get_redactions():
 
     return jsonify(response)
 
-@app.route('/header_links', methods=['GET'])
+@APP.route('/header_links', methods=['GET'])
 def get_header_links():
+    """
+    Return header links from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -172,8 +205,11 @@ def get_header_links():
 
     return jsonify(response)
 
-@app.route('/integrations', methods=['GET'])
+@APP.route('/integrations', methods=['GET'])
 def get_integrations():
+    """
+    Return integrations from SigSci API.
+    """
     if 'username' not in session:
         abort(401)
 
@@ -188,12 +224,18 @@ def get_integrations():
 
     return jsonify(response)
 
-@app.route('/js/<path:path>')
+@APP.route('/js/<path:path>')
 def send_js(path):
+    """
+    Route for javascript files
+    """
     return send_from_directory('js', path)
 
-@app.route('/login', methods=['POST'])
+@APP.route('/login', methods=['POST'])
 def login():
+    """
+    Route for login
+    """
     email = request.form.get('email', None)
     password = request.form.get('password', None)
     sigsci = sigsciapi.SigSciApi(email, password)
@@ -206,9 +248,8 @@ def login():
         sigsci.corp = sigsci.get_corps()['data'][0]['name']
 
         user = sigsci.get_corp_user(email)
-        
+
         if 'message' in user:
-            print(user['message'])
             abort(403)
         else:
             session['username'] = email
@@ -221,29 +262,44 @@ def login():
 
     return render_template('index.html', result=result)
 
-@app.route('/logout')
+@APP.route('/logout')
 def logout():
-    # remove the username from the session if it's there
+    """
+    Route for logout
+    """
+    # Remove the username from the session if it's there
     session.pop('username', None)
     return redirect(url_for('default'))
 
-@app.route('/')
+@APP.route('/')
 def default():
+    """
+    Route for default page
+    """
     javascript = 'get_corp_sites();'
     return render_template('index.html', javascript=javascript)
 
-@app.route('/favicon.ico')
+@APP.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
+    """
+    Route for favicon
+    """
+    return send_from_directory(os.path.join(APP.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-@app.route('/logo.png')
+@APP.route('/logo.png')
 def logo():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
+    """
+    Route for logo image
+    """
+    return send_from_directory(os.path.join(APP.root_path, 'static'),
                                'sigsci-black.png', mimetype='image/png')
 
-@app.route('/site')
+@APP.route('/site')
 def site():
+    """
+    Route for site page
+    """
     if 'username' not in session:
         abort(401)
 
@@ -254,18 +310,21 @@ def site():
     sigsci.corp = session['corp']
 
     if 'token' in sigsci.token:
-        site = sigsci.get_corp_site(name)
+        corp_site = sigsci.get_corp_site(name)
     else:
         abort(401)
 
-    display_name = site['displayName']
-    session['site'] = site['name']
+    display_name = corp_site['displayName']
+    session['site'] = corp_site['name']
 
     javascript = 'get_request_rules("{}", "{}");'.format(session['corp'], name)
     return render_template('site.html', javascript=javascript, display_name=display_name)
 
-@app.route('/copy_configuration', methods=['POST'])
+@APP.route('/copy_configuration', methods=['POST'])
 def copy_configuration():
+    """
+    Route for copying configuration
+    """
     if 'username' not in session:
         abort(401)
 
@@ -278,7 +337,6 @@ def copy_configuration():
     sigsci.site = session['site']
 
     if 'token' in sigsci.token:
-        #site = sigsci.get_corp_site(name)
         result = '{ "status": "success" }'
         identifier = request.form.get('identifier', None)
 
@@ -328,7 +386,13 @@ def copy_configuration():
             else:
                 # handle structure for templated rules
                 # prep and build payload
-                payload = { 'alertAdds': [], 'alertDeletes': [], 'alertUpdates': [], 'detectionAdds': [], "detectionDeletes": [], "detectionUpdates": [] }
+                payload = {
+                    'alertAdds': [],
+                    'alertDeletes': [],
+                    'alertUpdates': [],
+                    'detectionAdds': [],
+                    'detectionDeletes': [],
+                    'detectionUpdates': []}
 
                 # let's gather up the detections
                 for config in config_data['data']:
@@ -336,17 +400,21 @@ def copy_configuration():
                         if identifier == config['name']:
                             # this is the signal we want
                             # disable rule before copying
-                            d = {'name':detection['name'], 'enabled':False, 'fields':detection['fields']}
-                            payload['detectionAdds'].append(d)
+                            detection_add = {'name':detection['name'], 'enabled':False,
+                                             'fields':detection['fields']}
+                            payload['detectionAdds'].append(detection_add)
 
                 for config in config_data['data']:
                     for alert in config['alerts']:
                         if identifier == alert['tagName']:
                             # this is the signal we want
                             # disable rule before copying
-                            a = {'action':alert['action'], 'enabled':False, 'interval':alert['interval'],
-                            'skipNotifications':alert['skipNotifications'], 'longName':alert['longName'], 'threshold':alert['threshold']}
-                            payload['alertAdds'].append(a)
+                            alert_add = {'action':alert['action'], 'enabled':False,
+                                         'interval':alert['interval'],
+                                         'skipNotifications':alert['skipNotifications'],
+                                         'longName':alert['longName'],
+                                         'threshold':alert['threshold']}
+                            payload['alertAdds'].append(alert_add)
 
         else:
             config = config_data
@@ -385,6 +453,5 @@ def copy_configuration():
 
 if __name__ == '__main__':
     # Bind to PORT if defined, otherwise default to 5000.
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-
+    PORT = int(os.environ.get('PORT', 5000))
+    APP.run(host='0.0.0.0', port=PORT)
