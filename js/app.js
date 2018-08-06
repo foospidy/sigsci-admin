@@ -168,7 +168,7 @@ function get_advanced_rules(corp, name) {
             $.each(data['data'], function(key, val) {
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/advancedRules/' + val.shortName + '" class="edit_rule" target="_new">' + val.shortName + '</a>';
+                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/advancedRules/' + val.id + '" class="edit_rule" target="_new">' + val.shortName + '</a>';
                 html += '</div></div>';
             });
 
