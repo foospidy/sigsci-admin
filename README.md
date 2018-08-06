@@ -7,6 +7,8 @@ make copying configuration between sites more convenient. More features will be 
 
 To report a bug or request a feature, submit a github issue [here](https://github.com/foospidy/sigsci-admin/issues).
 
+Pull requets are welcomed.
+
 ### Hosted
 
 https://sigsci-admin.herokuapp.com
