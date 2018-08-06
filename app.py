@@ -295,6 +295,14 @@ def logo():
     return send_from_directory(os.path.join(APP.root_path, 'static'),
                                'sigsci-black.png', mimetype='image/png')
 
+@APP.route('/github.png')
+def github():
+    """
+    Route for github logo image
+    """
+    return send_from_directory(os.path.join(APP.root_path, 'static'),
+                               'github.png', mimetype='image/png')
+
 @APP.route('/site')
 def site():
     """
