@@ -6,3 +6,7 @@ run-local:
 
 lint:
 	source .env/bin/activate && pylint app.py
+
+install:
+	pip install -r requirements.txt
+	pip install pylint
