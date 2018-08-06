@@ -7,7 +7,7 @@ make copying configuration between sites more convenient. More features will be 
 
 To report a bug or request a feature, submit a github issue [here](https://github.com/foospidy/sigsci-admin/issues).
 
-Pull requets are welcomed.
+Pull requests are welcomed.
 
 ### Hosted
 
