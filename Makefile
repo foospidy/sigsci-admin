@@ -5,7 +5,7 @@ run-local:
 	source .env/bin/activate && gunicorn app:app
 
 lint:
-	source .env/bin/activate && pylint app.py
+	pylint app.py
 
 install:
 	pip install -r requirements.txt
