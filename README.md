@@ -21,4 +21,3 @@ https://sigsci-admin.herokuapp.com
 ### Run Local
 
 `$ make run-local`
-
