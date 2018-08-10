@@ -1,1 +1,1 @@
-web: gunicorn app:APP
+web: sigsci/bin/sigsci-start gunicorn app:APP
