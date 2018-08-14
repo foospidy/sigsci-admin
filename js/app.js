@@ -366,7 +366,7 @@ function get_integrations(corp, name) {
         });
 }
 
-function get_sites_dropdown(excluxe_site) {
+function get_sites_dropdown(exclude_site) {
     var html = '';
 
     $.ajax({
@@ -389,7 +389,7 @@ function get_sites_dropdown(excluxe_site) {
             sites.sort();
 
             $.each(sites, function(key, val) {
-                if(excluxe_site != val[0]) {
+                if(exclude_site != val[0]) {
                     html += '<li><a href="#' + val[0] + '" onclick="$(\'.btn:first-child\').text($(this).text());">' + val[1] + '</a></li>';
                 }
             });
