@@ -5,6 +5,7 @@ import os
 from flask import Flask, session, render_template, request, \
                   redirect, url_for, send_from_directory, abort, jsonify
 from pysigsci import sigsciapi
+import json
 
 APP = Flask(__name__, static_url_path='/static')
 
@@ -13,7 +14,8 @@ SECRET_KEY = os.environ.get('FLASK_SECRET_KEY', None)
 if SECRET_KEY is not None:
     APP.secret_key = os.environ['FLASK_SECRET_KEY']
 else:
-    APP.secret_key = open("/dev/random", "rb").read(32)
+    # APP.secret_key = open("/dev/random", "rb").read(32)
+    APP.secret_key = os.urandom(32)
 
 
 @APP.route('/corp_sites', methods=['GET'])
@@ -22,7 +24,7 @@ def get_corp_sites():
     Return list of corp sites from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -40,7 +42,7 @@ def get_request_rules():
     Return request rules from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -59,7 +61,7 @@ def get_signal_rules():
     Return signal rules from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -78,7 +80,7 @@ def get_templated_rules():
     Return templated rules from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -97,7 +99,7 @@ def get_advanced_rules():
     Return advanced rules from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -110,13 +112,55 @@ def get_advanced_rules():
 
     return jsonify(response)
 
+
+@APP.route('/advanced_rule_editor', methods=['GET', 'POST'])
+def load_editor():
+    """
+    Return advanced rules from SigSci API.
+    """
+    if 'username' not in session:
+        return redirect("/", code=302)
+
+    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    sigsci.corp = session['corp']
+    sigsci.site = request.args.get('name', None)
+    sigsci.id = request.args.get('id', None)
+
+    if 'token' in sigsci.token:
+        if request.method == 'GET':
+            response = sigsci.get_advanced_rules()
+        else:
+            baseUrl = "https://dashboard.signalsciences.net/api/v0"
+            advancedRuleEndpoint = "{}/corps/{}/sites/{}/advancedRules/{}/test".format(
+                baseUrl, sigsci.corp, sigsci.site, sigsci.id)
+
+            if not request.json:
+                abort(400)
+            payload = json.dumps(request.json)
+
+            response = sigsci._make_request(
+                endpoint=advancedRuleEndpoint, method="POST", json=payload)
+
+            if 'message' in response:
+                result = '{{"status": "failed", "message": {}}}'.format(response['message'])
+            else:
+                result = response
+            
+            return result
+    else:
+        abort(401)
+
+    return jsonify(response)
+    # return render_template(response)
+
+
 @APP.route('/rule_lists', methods=['GET'])
 def get_rule_lists():
     """
     Return rule lists from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -135,7 +179,7 @@ def get_custom_signals():
     Return custom signals from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -154,7 +198,7 @@ def get_custom_alerts():
     Return custom alerts from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -173,7 +217,7 @@ def get_redactions():
     Return redactions from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -192,7 +236,7 @@ def get_header_links():
     Return header links from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -211,7 +255,7 @@ def get_integrations():
     Return integrations from SigSci API.
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
     sigsci.corp = session['corp']
@@ -309,7 +353,7 @@ def site():
     Route for site page
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     name = request.args.get('name', None)
     display_name = ''
@@ -328,13 +372,14 @@ def site():
     javascript = 'get_request_rules("{}", "{}");'.format(session['corp'], name)
     return render_template('site.html', javascript=javascript, display_name=display_name)
 
+
 @APP.route('/copy_configuration', methods=['POST'])
 def copy_configuration():
     """
     Route for copying configuration
     """
     if 'username' not in session:
-        abort(401)
+        return redirect("/", code=302)
 
     config_type = request.args.get('type', None)
     target_site = request.args.get('target', None)

@@ -150,6 +150,7 @@ function get_templated_rules(corp, name) {
 }
 
 function get_advanced_rules(corp, name) {
+    // TODO: Add "New" button
     toggle_tabs('advanced_rules');
     $.ajax({
         url: "/advanced_rules?name=" + name
@@ -168,16 +169,123 @@ function get_advanced_rules(corp, name) {
             $.each(data['data'], function(key, val) {
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/advancedRules/' + val.id + '" class="edit_rule" target="_new">' + val.shortName + '</a>';
+                        <input type="checkbox" value="' + val.id + '"> <a href="javascript:get_advanced_rule_editor(\'' + corp + '\', \'' + name + '\', \'' + val.id + '\');" class="edit_rule">' + val.shortName + '</a>';
                 html += '</div></div>';
             });
-
             html += '</div>';
-
            document.getElementById("content").innerHTML = html;
            get_sites_dropdown(exclude_site=name);
         });
 }
+
+
+function get_advanced_rule_editor(corp, name, ruleID="new", testMode="none") {
+
+    // TODO: Need to add test, save, and delete buttons. Also 
+    $.ajax({
+        url: "/advanced_rule_editor?name=" + name + "&id=" + ruleID
+        })
+        .done(function(data) {
+            var rulePhases = {
+                    initRule: "Init Rule",
+                    preEarlyRule: "Pre Early Rule",
+                    preRule: "Pre Rule",
+                    preLateRule: "Pre Late Rule",
+                    postEarlyRule: "Post Early Rule",
+                    postRule: "Post Rule",
+                    postLateRule: "Post Late Rule",
+                    sampleRequest: "Sample Request",
+                    sampleResponse: "Sample Response"
+                };
+
+            var html = '';
+
+            html += '<h3 style="margin-left:125px">Advanced Editor</h3>';
+            // Haven't quite gotten the test button to work
+            html += '<div style="margin-left:125px"><table><tr><td> <input type="button" value="Test Rule" onclick="get_advanced_rule_editor(\'' + corp + '\',\'' + name  + '\',\'' + ruleID + '\',\'test\');"class="btn btn-default"></td></tr></table></div>';
+            html += '<br />';
+
+            $.each(rulePhases, function(key, val) {
+                html += '<h3 style="margin-left:125px">' + val + '</h3>';
+                html += '<pre id="' + key + '" style="margin-left:125px"></pre>';
+                //html += '<div height="80px" text-align="left"></div>';
+                html += '<div height="80px" style="margin-left:125px"></div>';
+
+            });
+
+            document.getElementById("content").innerHTML = html;
+
+            var tmpName = {};
+            require.config({paths: { "ace" : "../js/ace"}});
+            // load ace and extensions
+            require(["ace/ace"], function(ace) {
+                $.each(rulePhases, function(ruleKey, ruleVal) {
+                    $.each(data['data'], function(key, val) {
+                        if (val.id == ruleID) {
+                            tmpName[ruleKey] = ace.edit(ruleKey, {
+                                theme: "ace/theme/tomorrow_night_eighties",
+                                mode: "ace/mode/gosh",
+                                maxLines: 20,
+                                minLines: 5,
+                                wrap: true,
+                                autoScrollEditorIntoView: true
+                            });
+                            tmpName[ruleKey].session.setValue(val[ruleKey]);
+                            if (ruleKey == "sampleRequest" || ruleKey == "sampleResponse") {
+                                tmpName[ruleKey].session.setMode("ace/mode/text");
+                            }
+                        }
+                    });
+                });
+                if (testMode == "test") {
+                    var initRuleEditor = ace.edit("initRule")
+                    var preEarlyRuleEditor = ace.edit("preEarlyRule")
+                    var preRuleEditor = ace.edit("preRule")
+                    var preLateRuleEditor = ace.edit("preLateRule")
+                    var postEarlyRuleEditor = ace.edit("postLateRule")
+                    var postRuleEditor = ace.edit("postRule")
+                    var postLateRuleEditor = ace.edit("postLateRule")
+                    var sampleRequestRuleEditor = ace.edit("sampleRequest")
+                    var sampleReaponseRuleEditor = ace.edit("sampleResponse")
+
+
+                    var testPayload = {
+                        id: ruleID,
+                        initRule: initRuleEditor.getValue(),
+                        preEarlyRule: preEarlyRuleEditor.getValue(),
+                        preRule: preRuleEditor.getValue(),
+                        preLateRule: preLateRuleEditor.getValue(),
+                        postEarlyRule: postEarlyRuleEditor.getValue(),
+                        postRule: postRuleEditor.getValue(),
+                        postLateRule: postLateRuleEditor.getValue(),
+                        sampleRequest: sampleRequestRuleEditor.getValue(),
+                        sampleResponse: sampleReaponseRuleEditor.getValue(),
+                    }
+                    var testPayloadJson = JSON.stringify(testPayload)
+                    // alert(testPayloadJson);
+                    $.ajax({
+                        url: "/advanced_rule_editor?name=" + name + "&id=" + ruleID,
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: testPayloadJson,
+                        method: "POST"
+                    }).fail(function(xhr, status, error) {
+                        $.notify({ message: "Advanced Rule Test Failed"}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                        $.notify({ message: error}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                        $.notify({ message: testPayloadJson}, { type: "danger" });
+                        alert(testPayloadJson);
+                        return;
+                    }).done(function(xhr) {
+                        console.log(xhr);
+                        $.notify({ message: "Advanced Rule Test successful."}, { type: "info", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                        return;
+                    });
+                }
+            });
+        });
+}
+
+
 
 function get_rule_lists(corp, name) {
     toggle_tabs('lists');
