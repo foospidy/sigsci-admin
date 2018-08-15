@@ -231,6 +231,13 @@ def send_js(path):
     """
     return send_from_directory('js', path)
 
+@APP.route('/css/<path:path>')
+def send_css(path):
+    """
+    Route for javascript files
+    """
+    return send_from_directory('css', path)
+
 @APP.route('/login', methods=['POST'])
 def login():
     """
@@ -324,7 +331,7 @@ def site():
 
     display_name = corp_site['displayName']
     session['site'] = corp_site['name']
-
+    #$(document).ready(function() {{$("#copy_to_these_sites").multiselect();}});
     javascript = 'get_request_rules("{}", "{}");'.format(session['corp'], name)
     return render_template('site.html', javascript=javascript, display_name=display_name)
 

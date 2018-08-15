@@ -53,8 +53,6 @@ function get_request_rules(corp, name) {
             <input type="checkbox" id="check_all" onchange="toggle_checks()"> Select all<hr></div></div>';
 
             $.each(data['data'], function(key, val) {
-                //fields = [val.displayName, val.name, val.agentLevel];
-                //rules.push(fields);
                 var conditions = val.conditions;
                 var condition_string = '';
                 for(var i=0; i<conditions.length; i++) {
@@ -64,7 +62,7 @@ function get_request_rules(corp, name) {
 
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/requestRules/' + val.id + '" class="edit_rule" target="_new">' + val.id + '</a> \
+                        <input class="config" type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/requestRules/' + val.id + '" class="edit_rule" target="_new">' + val.id + '</a> \
                         <div>' + val.reason + '</div> \
                         <pre>' + condition_string + '</pre></div>';
                 html += '</div>';
@@ -73,7 +71,8 @@ function get_request_rules(corp, name) {
             html += '</div>';
 
            document.getElementById("content").innerHTML = html;
-           get_sites_dropdown(exclude_site=name);
+
+           get_sites_multi_select(exclude_site=name);
         });
 }
 
@@ -103,7 +102,7 @@ function get_signal_rules(corp, name) {
 
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/signalRules/' + val.id + '" class="edit_rule" target="_new">' + val.id + '</a> \
+                        <input class="config" type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/signalRules/' + val.id + '" class="edit_rule" target="_new">' + val.id + '</a> \
                         <div>' + val.reason + '</div> \
                         <pre>' + condition_string + '</pre></div>';
                 html += '</div>';
@@ -112,7 +111,7 @@ function get_signal_rules(corp, name) {
             html += '</div>';
 
            document.getElementById("content").innerHTML = html;
-           get_sites_dropdown(exclude_site=name);
+           get_sites_multi_select(exclude_site=name);
         });
 }
 
@@ -137,7 +136,7 @@ function get_templated_rules(corp, name) {
             if(applicable_templated_rules.includes(val.name)) {
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.name + '"> \
-                        <input type="checkbox" value="' + val.name + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/templatedRules/' + val.name + '/edit" class="edit_rule" target="_new">' + val.name + '</a></div>';
+                        <input class="config" type="checkbox" value="' + val.name + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/templatedRules/' + val.name + '/edit" class="edit_rule" target="_new">' + val.name + '</a></div>';
                 html += '</div>';
             }
         });
@@ -145,7 +144,7 @@ function get_templated_rules(corp, name) {
         html += '</div>';
 
         document.getElementById("content").innerHTML = html;
-        get_sites_dropdown(exclude_site=name);
+        get_sites_multi_select(exclude_site=name);
     });
 }
 
@@ -168,14 +167,14 @@ function get_advanced_rules(corp, name) {
             $.each(data['data'], function(key, val) {
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/advancedRules/' + val.id + '" class="edit_rule" target="_new">' + val.shortName + '</a>';
+                        <input class="config" type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/advancedRules/' + val.id + '" class="edit_rule" target="_new">' + val.shortName + '</a>';
                 html += '</div></div>';
             });
 
             html += '</div>';
 
            document.getElementById("content").innerHTML = html;
-           get_sites_dropdown(exclude_site=name);
+           get_sites_multi_select(exclude_site=name);
         });
 }
 
@@ -198,7 +197,7 @@ function get_rule_lists(corp, name) {
             $.each(data['data'], function(key, val) {
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/ruleLists/' + val.name + '" class="edit_rule" target="_new">' + val.name + '</a> \
+                        <input class="config" type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/ruleLists/' + val.name + '" class="edit_rule" target="_new">' + val.name + '</a> \
                         <div>' + val.description + '</div>';
                 html += '</div></div>';
             });
@@ -206,7 +205,7 @@ function get_rule_lists(corp, name) {
             html += '</div>';
 
            document.getElementById("content").innerHTML = html;
-           get_sites_dropdown(exclude_site=name);
+           get_sites_multi_select(exclude_site=name);
         });
 }
 
@@ -229,7 +228,7 @@ function get_custom_signals(corp, name) {
             $.each(data['data'], function(key, val) {
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.tagName + '"> \
-                        <input type="checkbox" value="' + val.tagName + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/tags/' + val.tagName + '/edit" class="edit_rule" target="_new">' + val.tagName + '</a> \
+                        <input class="config" type="checkbox" value="' + val.tagName + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/tags/' + val.tagName + '/edit" class="edit_rule" target="_new">' + val.tagName + '</a> \
                         <div>' + val.description + '</div>';
                 html += '</div></div>';
             });
@@ -237,7 +236,7 @@ function get_custom_signals(corp, name) {
             html += '</div>';
 
            document.getElementById("content").innerHTML = html;
-           get_sites_dropdown(exclude_site=name);
+           get_sites_multi_select(exclude_site=name);
         });
 }
 
@@ -262,7 +261,7 @@ function get_custom_alerts(corp, name) {
                 if(!applicable_templated_rules.includes(val.tagName)) {
                     html += '<div class="row">';
                     html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                            <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/alerts/' + val.id + '/edit" class="edit_rule" target="_new">' + val.tagName + '</a> \
+                            <input class="config" type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/alerts/' + val.id + '/edit" class="edit_rule" target="_new">' + val.tagName + '</a> \
                             <div>' + val.longName + '</div>';
                     html += '</div></div>';
                 }
@@ -271,7 +270,7 @@ function get_custom_alerts(corp, name) {
             html += '</div>';
 
            document.getElementById("content").innerHTML = html;
-           get_sites_dropdown(exclude_site=name);
+           get_sites_multi_select(exclude_site=name);
         });
 }
 
@@ -294,14 +293,14 @@ function get_redactions(corp, name) {
             $.each(data['data'], function(key, val) {
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/redactions/' + val.id + '/edit" class="edit_rule" target="_new">' + val.field + '</a>';
+                        <input class="config" type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/redactions/' + val.id + '/edit" class="edit_rule" target="_new">' + val.field + '</a>';
                 html += '</div></div>';
             });
 
             html += '</div>';
 
            document.getElementById("content").innerHTML = html;
-           get_sites_dropdown(exclude_site=name);
+           get_sites_multi_select(exclude_site=name);
         });
 }
 
@@ -324,14 +323,14 @@ function get_header_links(corp, name) {
             $.each(data['data'], function(key, val) {
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/header-links/" class="edit_rule" target="_new">' + val.linkName + '</a>';
+                        <input class="config" type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/header-links/" class="edit_rule" target="_new">' + val.linkName + '</a>';
                 html += '</div></div>';
             });
 
             html += '</div>';
 
            document.getElementById("content").innerHTML = html;
-           get_sites_dropdown(exclude_site=name);
+           get_sites_multi_select(exclude_site=name);
         });
 }
 
@@ -354,7 +353,7 @@ function get_integrations(corp, name) {
             $.each(data['data'], function(key, val) {
                 html += '<div class="row">';
                 html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.id + '"> \
-                        <input type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/integrations/" class="edit_rule" target="_new">' + val.name + '</a> \
+                        <input class="config" type="checkbox" value="' + val.id + '"> <a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + name + '/integrations/" class="edit_rule" target="_new">' + val.name + '</a> \
                         <div>' + val.url + '</div>';
                 html += '</div></div>';
             });
@@ -362,7 +361,7 @@ function get_integrations(corp, name) {
             html += '</div>';
 
            document.getElementById("content").innerHTML = html;
-           get_sites_dropdown(exclude_site=name);
+           get_sites_multi_select(exclude_site=name);
         });
 }
 
@@ -400,6 +399,37 @@ function get_sites_dropdown(exclude_site) {
     });
 }
 
+function get_sites_multi_select(exclude_site) {
+    var html = '';
+
+    $.ajax({
+        url: "/corp_sites"
+        })
+        .done(function(data) {
+            html += '<select multiple="multiple" id="copy_to_these_sites">';
+
+            sites = [];
+
+            $.each(data['data'], function(key, val) {
+                fields = [val.name, val.displayName];
+                sites.push(fields);
+            });
+
+            sites.sort();
+
+            $.each(sites, function(key, val) {
+                if(exclude_site != val[0]) {
+                    html += '<option class="site_select" value="' + val[0] + '">' + val[1] + '</option>';
+                }
+            });
+
+            html += '</select>';
+
+            document.getElementById("copy_to_site").innerHTML = html;
+            $("#copy_to_these_sites").multiselect()
+    });
+}
+
 function toggle_tabs(tab_name) {
     var inputs = document.getElementById('tab-list').childNodes;
     for(var i = 0; i < inputs.length; i++) {
@@ -429,33 +459,28 @@ function toggle_checks() {
 
 function copy_configuration(type) {
     var target_site = '';
+    var site_list = document.getElementsByClassName("site_select");
 
-    if(window.location.hash) {
-        target_site = window.location.hash.replace('#', '');
-    } else {
-        // no selection
-        return;
-    }
+    for(var i=0; i < site_list.length; i++) {
+        if(site_list[i].tagName == "OPTION" && site_list[i].selected) {
+            target_site = site_list[i].value;
 
-    var inputs = document.getElementsByTagName("input");
+            var inputs = document.getElementsByClassName("config");
 
-    for(var i = 0; i < inputs.length; i++) {
-        if(inputs[i].type == "checkbox") {
-            if(inputs[i].id != 'check_all') {
-                if(inputs[i].checked == true) {
-                    $.ajax({
-                        url: "/copy_configuration?type=" + type + "&target=" + target_site,
-                        dataType: "json",
-                        data: { identifier: inputs[i].value},
-                        method: "POST"
-                    }).fail(function() {
-                        $.notify({ message: "Copy failed."}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
-                        return;
-                    }).done(function(xhr) {
-                        console.log(xhr);
-                        $.notify({ message: "Copy successful."}, { type: "info", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
-                        return;
-                    });
+            for(var j = 0; j < inputs.length; j++) {
+                if(inputs[j].type == "checkbox" ) {
+                    if(inputs[j].checked) {
+                        $.ajax({
+                            url: "/copy_configuration?type=" + type + "&target=" + target_site,
+                            dataType: "json",
+                            data: { identifier: inputs[j].value },
+                            method: "POST"
+                        }).fail(function() {
+                            $.notify({ message: "Copy failed."}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                        }).done(function(xhr) {
+                            $.notify({ message: "Copy successful."}, { type: "info", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                        });
+                    }
                 }
             }
         }
