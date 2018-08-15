@@ -5,38 +5,17 @@ define(function(require, exports, module) {
 
     var GolangHighlightRules = function() {
         var keywords = (
-            "if|else|range"
+            "else|break|case|return|goto|if|const|select|" +
+            "continue|struct|default|switch|for|range|" +
+            "func|import|package|chan|defer|fallthrough|go|interface|map|range|" +
+            "select|type|var"
         );
         var builtinTypes = (
-            "string|uint8|uint16|uint32|uint64|int8|int16|int32|int64|float32|Array|" +
-            "float64|complex64|complex128|byte|rune|uint|int|uintptr|bool|error|" +
-            "IPAttrSet|NewGlobMatcher|Array|String|EqualityMatcher|HashEqualityMatcher|" +
-            "IPAttrSet|IPDataSet|IPV4Matcher|RegexpMatcher|SubstringMatcher|" 
+            "string|uint8|uint16|uint32|uint64|int8|int16|int32|int64|float32|" +
+            "float64|complex64|complex128|byte|rune|uint|int|uintptr|bool|error"
         );
         var builtinFunctions = (
-            "AddrInNetwork|AddrIsPrivate|AddrIsValid|AllTrueQ|AnyTrueQ|" +
-            "Assert|Base64Decode|Base64DecodeStd|Base64DecodeStdRaw|Base64DecodeURL|" +
-            "Base64DecodeURLRaw|Base64Encode|Base64EncodeStd|Base64EncodeStdRaw|Base64EncodeURL|" +
-            "Base64EncodeURLRaw|ContainsAll|ContainsAny|ContainsExactly|ContainsNone|" +
-            "ContainsOnly|Debug|DeepEqual|Discard|Drop|EmptyQ|Equal|FeatureEnabled|" +
-            "First|Greater|GreaterEqual|HTMLDecode|HTMLEncode|HTTPCookiesAsMap|" +
-            "HTTPParseCookieHeaders|HTTPParseCookies|HTTPParseSetCookieHeaders|" +
-            "HasNull|HTTPParseSetCookies|HexDecode|HexEncode|IgnoreCase|IsASCII|IsAlpha|" +
-            "IsAlphaNumeric|IsCmdExeV0|IsCodeInjectionPhpV0|IsHostname|IsPrintable|" +
-            "IsUTF8|KeyExistsQ|Last|Less|LessEqual|Log|Lookup|LookupAll|LowerCase" +
-            "MD5Sum|NetworkContainsQ|NoneTrueQ|NormalizePath|NotEqual|PathBase|" +
-            "PathDirectory|PathExtention|PathMatchQ|RandomFloat|RandomInteger|" +
-            "RegexpCompile|RegexpMatch|RegexpQuoteMeta|Reverse|SHA1Sum|SHA256Sum|" +
-            "SHA512Sum|SetClientIP|SetPath|SetProtocol|SetRequestHeader|SetResponseHeader|" +
-            "SetTLSCipher|SetTLSProtocol|StringArray|StringContainsQ|StringEndsQ|" +
-            "StringEqualsQ|StringJoin|StringLastIndex|StringReplace|StringReverse" +
-            "StringSlice|StringSplit|StringStartsQ|StringTrim|Take|TimeHour|" +
-            "TimeMillisecond|TimeMinute|TimeNanosecond|TimeNow|TimeParse|TimeSecond|" +
-            "TimeUnix|TimeZero|Type|URLDecodePath|URLDecodeQuery|URLEncodePath|" +
-            "URLEncodeQuery|URLHost|URLPath|URLQuery|URLScheme|UpperCase|MatchOne|" +
-            "NewAhoCorasickMatcher|NewEqualityMatcher|NewHashMatcher|HeaderMap|" +
-            "ImportNewIPAttrSet|NewIPAttrSet|AddAttr|AddRangeAttr|AddSignal|AddTag|" +
-            "SetResponse|Match|ClientIP|Assert"
+            "new|close|cap|copy|panic|panicln|print|println|len|make|delete|real|recover|imag|append"
         );
         var builtinConstants = ("nil|true|false|iota");
 
@@ -53,7 +32,7 @@ define(function(require, exports, module) {
             "start" : [
                 {
                     token : "comment",
-                    regex : "#.*$"
+                    regex : "\\/\\/.*$"
                 },
                 DocCommentHighlightRules.getStartRule("doc-start"),
                 {

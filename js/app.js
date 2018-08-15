@@ -179,7 +179,8 @@ function get_advanced_rules(corp, name) {
 }
 
 
-function get_advanced_rule_editor(corp, name, ruleID="new") {
+function get_advanced_rule_editor(corp, name, ruleID="new", testMode="none") {
+
     // TODO: Need to add test, save, and delete buttons. Also 
     $.ajax({
         url: "/advanced_rule_editor?name=" + name + "&id=" + ruleID
@@ -201,7 +202,7 @@ function get_advanced_rule_editor(corp, name, ruleID="new") {
 
             html += '<h3 style="margin-left:125px">Advanced Editor</h3>';
             // Haven't quite gotten the test button to work
-            // html += '<div style="margin-left:125px"><table><tr><td> <input type="button" value="Test Rule" onclick="test_advanced_rule(\'' + corp + '\',\'' + name  + '\',\'' + ruleID + '\');"class="btn btn-default"></td></tr></table></div>';
+            html += '<div style="margin-left:125px"><table><tr><td> <input type="button" value="Test Rule" onclick="get_advanced_rule_editor(\'' + corp + '\',\'' + name  + '\',\'' + ruleID + '\',\'test\');"class="btn btn-default"></td></tr></table></div>';
             html += '<br />';
 
             $.each(rulePhases, function(key, val) {
@@ -236,50 +237,55 @@ function get_advanced_rule_editor(corp, name, ruleID="new") {
                         }
                     });
                 });
+                if (testMode == "test") {
+                    var initRuleEditor = ace.edit("initRule")
+                    var preEarlyRuleEditor = ace.edit("preEarlyRule")
+                    var preRuleEditor = ace.edit("preRule")
+                    var preLateRuleEditor = ace.edit("preLateRule")
+                    var postEarlyRuleEditor = ace.edit("postLateRule")
+                    var postRuleEditor = ace.edit("postRule")
+                    var postLateRuleEditor = ace.edit("postLateRule")
+                    var sampleRequestRuleEditor = ace.edit("sampleRequest")
+                    var sampleReaponseRuleEditor = ace.edit("sampleResponse")
+
+
+                    var testPayload = {
+                        id: ruleID,
+                        initRule: initRuleEditor.getValue(),
+                        preEarlyRule: preEarlyRuleEditor.getValue(),
+                        preRule: preRuleEditor.getValue(),
+                        preLateRule: preLateRuleEditor.getValue(),
+                        postEarlyRule: postEarlyRuleEditor.getValue(),
+                        postRule: postRuleEditor.getValue(),
+                        postLateRule: postLateRuleEditor.getValue(),
+                        sampleRequest: sampleRequestRuleEditor.getValue(),
+                        sampleResponse: sampleReaponseRuleEditor.getValue(),
+                    }
+                    var testPayloadJson = JSON.stringify(testPayload)
+                    // alert(testPayloadJson);
+                    $.ajax({
+                        url: "/advanced_rule_editor?name=" + name + "&id=" + ruleID,
+                        contentType: "application/json",
+                        dataType: "json",
+                        data: testPayloadJson,
+                        method: "POST"
+                    }).fail(function(xhr, status, error) {
+                        $.notify({ message: "Advanced Rule Test Failed"}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                        $.notify({ message: error}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                        $.notify({ message: testPayloadJson}, { type: "danger" });
+                        alert(testPayloadJson);
+                        return;
+                    }).done(function(xhr) {
+                        console.log(xhr);
+                        $.notify({ message: "Advanced Rule Test successful."}, { type: "info", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                        return;
+                    });
+                }
             });
         });
 }
 
-function test_advanced_rule(corp, name, ruleID) {
-    var initRuleEditor = ace.edit("initRule")
-    var preEarlyRuleEditor = ace.edit("preEarlyRule")
-    var preRuleEditor = ace.edit("preRule")
-    var preLateRuleEditor = ace.edit("preLateRule")
-    var postEarlyRuleEditor = ace.edit("postLateRule")
-    var postRuleEditor = ace.edit("postRule")
-    var postLateRuleEditor = ace.edit("postLateRule")
-    var sampleRequestRuleEditor = ace.edit("sampleRequest")
-    var sampleReaponseRuleEditor = ace.edit("sampleResponse")
 
-
-    var testPayload = {
-        id: ruleID,
-        initRule: initRuleEditor.getValue(),
-        preEarlyRule: preEarlyRuleEditor.getValue(),
-        preRule: preRuleEditor.getValue(),
-        preLateRule: preLateRuleEditor.getValue(),
-        postEarlyRule: postEarlyRuleEditor.getValue(),
-        postRule: postRuleEditor.getValue(),
-        postLateRule: postLateRuleEditor.getValue(),
-        sampleRequest: sampleRequestRuleEditor.getValue(),
-        sampleResponse: sampleReaponseRuleEditor.getValue(),
-    }
-    var testPayloadJson = JSON.stringify(testPayload)
-    $.ajax({
-        url: "/advanced_rule_editor?name=" + name + "&id=" + ruleID,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        data: testPayloadJson,
-        method: "POST"
-    }).fail(function() {
-        $.notify({ message: "Advanced Rule Test Failed"}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
-        return;
-    }).done(function(xhr) {
-        console.log(xhr);
-        $.notify({ message: "Advanced Rule Test successful."}, { type: "info", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
-        return;
-    });
-}
 
 function get_rule_lists(corp, name) {
     toggle_tabs('lists');
