@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Signal Sciences Admin Tool</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="/js/bootstrap-notify.min.js"></script>
+  <script src="/js/bootstrap-multiselect.js"></script>
+  <script src="/js/app.js"></script>
+  <link rel="stylesheet" href="/css/bootstrap-multiselect.css" type="text/css"/>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#"><img src="/logo.png" align="left" height="25px"> Signal Sciences Admin Tool</a>
+    </div>
+    <ul class="nav navbar-nav">
+      {% if 'username' in session %}
+        <li class="active"><a href="/">Home</a></li>
+        <li><a href="/users">Users</a></li>
+        <!-- TODO: <li><a href="#">Health Check</a></li> -->
+        <!-- TODO: <li><a href="#">Audit</a></li>-->
+        <li><a href="/logout">Logout</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+  
+<div class="container">
+    <h3>Manage Users</h3>
+    <ul class="nav nav-tabs" id="tab-list">
+        <li id="by_users" class="active"><a href="javascript:">By Members</a></li>
+        <!-- <li id="by_sites"><a href="javascript:">By Sites</a></li>
+        <li id="pending_invites"><a href="javascript:">Pending Invites</a></li>
+        -->
+      </ul>
+</div>
+<br />
+<div id="content" style="vertical-align: top;" width="800px;"></div>
+{% if javascript is not none %}
+  <script>
+  {{ javascript|safe }}
+  </script>
+{% endif %}
+</body>
+</html>

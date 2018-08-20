@@ -22,7 +22,7 @@
     <ul class="nav navbar-nav">
       {% if 'username' in session %}
         <li class="active"><a href="/">Home</a></li>
-        <!-- TODO: <li><a href="#">Members</a></li> -->
+        <li><a href="/users">Users</a></li>
         <!-- TODO: <li><a href="#">Health Check</a></li> -->
         <!-- TODO: <li><a href="#">Audit</a></li>-->
         <li><a href="/logout">Logout</a></li>
@@ -34,7 +34,7 @@
 <div class="container">
     <h3>Manage configuration for <i>{{ display_name }}</i></h3>
     <ul class="nav nav-tabs" id="tab-list">
-        <li id="request_rules" class="active"><a href="javascript:get_request_rules('{{ session['corp']}}', '{{ session['site'] }}');">Request Rules</a></li>
+        <li id="request_rules" class="active"><a href="javascript:get_request_rules('{{ session['corp']}}', '{{ session['site'] }}');">Request User</a></li>
         <li id="signal_rules"><a href="javascript:get_signal_rules('{{ session['corp']}}', '{{ session['site'] }}');">Signal Rules</a></li>
         <li id="templated_rules"><a href="javascript:get_templated_rules('{{ session['corp']}}', '{{ session['site'] }}');">Templated Rules</a></li>
         <li id="advanced_rules"><a href="javascript:get_advanced_rules('{{ session['corp']}}', '{{ session['site'] }}');">Advanced Rules</a></li>

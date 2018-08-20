@@ -430,6 +430,51 @@ function get_sites_multi_select(exclude_site) {
     });
 }
 
+function get_corp_users(corp) {
+    toggle_tabs('by_users');
+
+    $.ajax({
+        url: "/corp_users"
+    })
+    .done(function(data) {
+        var html = '';
+        var members = [];
+
+        html += '<h3 style="margin-left:125px">By Users</h3>';
+        html += '<br />';
+        html += '<div class="container-fluid" style="margin-left:125px">';
+
+        $.each(data['data'], function(key, val) {
+            members.push(val.email);
+            html += '<div class="row">';
+            html += '<div class="col-sm-4" id="' + val.email + '">' + val.name + ' (<a href="https://dashboard.signalsciences.net/corps/' + corp + '/users/' + val.email + '/edit" target="_new">' + val.email + '</a>)</div>';
+            html += '<br><div id="memberships-' + val.email + '"></div>';
+            html += '</div><br>';
+        });
+
+        html += '</div>';
+
+        document.getElementById("content").innerHTML = html;
+    })
+    .done(function(data) {
+        $.each(data['data'], function(key, val) {
+            $.ajax({
+                url: "/memberships?email=" + val.email
+            })
+            .done(function(data) {
+                html = '';
+                $.each(data['data'], function(key, val) {
+                    html += '<div> &nbsp;  &nbsp;  &nbsp; ' + val.site['name'] + '</div>';
+                });
+                document.getElementById("memberships-" + val.email).innerHTML = html;
+            });
+        });
+    })
+    .fail(function() {
+        console.log('error');
+    });
+}
+
 function toggle_tabs(tab_name) {
     var inputs = document.getElementById('tab-list').childNodes;
     for(var i = 0; i < inputs.length; i++) {

@@ -224,6 +224,43 @@ def get_integrations():
 
     return jsonify(response)
 
+@APP.route('/corp_users', methods=['GET'])
+def get_corp_users():
+    """
+    Return list of corp users from SigSci API.
+    """
+    if 'username' not in session:
+        abort(401)
+
+    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    sigsci.corp = session['corp']
+
+    if 'token' in sigsci.token:
+        response = sigsci.get_corp_users()
+    else:
+        abort(401)
+
+    return jsonify(response)
+
+@APP.route('/memberships', methods=['GET'])
+def get_memberships():
+    """
+    Return list of user memberships from SigSci API.
+    """
+    if 'username' not in session:
+        abort(401)
+
+    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    sigsci.corp = session['corp']
+    email = request.args.get('email', None)
+
+    if 'token' in sigsci.token:
+        response = sigsci.get_memberships(email)
+    else:
+        abort(401)
+
+    return jsonify(response)
+
 @APP.route('/js/<path:path>')
 def send_js(path):
     """
@@ -334,6 +371,25 @@ def site():
     #$(document).ready(function() {{$("#copy_to_these_sites").multiselect();}});
     javascript = 'get_request_rules("{}", "{}");'.format(session['corp'], name)
     return render_template('site.html', javascript=javascript, display_name=display_name)
+
+@APP.route('/users')
+def users():
+    """
+    Route for users page
+    """
+    if 'username' not in session:
+        abort(401)
+
+    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    sigsci.corp = session['corp']
+
+    if 'token' in sigsci.token:
+        corp_users = sigsci.get_corp_users()
+    else:
+        abort(401)
+
+    javascript = 'get_corp_users("' + sigsci.corp + '");'
+    return render_template('users.html', javascript=javascript, corp_users=corp_users)
 
 @APP.route('/copy_configuration', methods=['POST'])
 def copy_configuration():
