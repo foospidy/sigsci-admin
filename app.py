@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get('FLASK_SECRET_KEY', None)
 if SECRET_KEY is not None:
     APP.secret_key = os.environ['FLASK_SECRET_KEY']
 else:
-    APP.secret_key = open("/dev/random", "rb").read(32)
+    APP.secret_key = os.urandom(32)
 
 
 @APP.route('/corp_sites', methods=['GET'])
