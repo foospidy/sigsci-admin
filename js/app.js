@@ -56,7 +56,6 @@ function get_request_rules(corp, name) {
     })
     .done(function(data) {
         var html = '';
-        console.log(statusCode);
         html += '<h3 style="margin-left:125px">Request Rules</h3>';
         html += '<div style="margin-left:125px">Copy selected to:  <table><tr><td><span id="copy_to_site"></span> </td><td> <input type="button" value="Copy" onclick="copy_configuration(\'request_rules\');" class="btn btn-default"></td></tr></table></div>';
         html += '<br />';
