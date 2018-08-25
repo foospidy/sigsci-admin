@@ -494,7 +494,9 @@ function get_sites_multi_select(exclude_site) {
         html += '</select>';
 
         document.getElementById("copy_to_site").innerHTML = html;
-        $("#copy_to_these_sites").multiselect()
+        $("#copy_to_these_sites").multiselect({
+            includeSelectAllOption: true
+        })
     });
 }
 
@@ -563,7 +565,7 @@ function toggle_checks() {
     var inputs = document.getElementsByTagName("input");
 
     for(var i = 0; i < inputs.length; i++) {
-        if(inputs[i].type == "checkbox") {
+        if(inputs[i].type == "checkbox" && (inputs[i].className.indexOf('config') > -1)) {
             if(inputs[i].id != 'check_all') {
                 if(document.getElementById('check_all').checked == false) {
                     inputs[i].checked = false;
