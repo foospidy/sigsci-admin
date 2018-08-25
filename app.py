@@ -515,7 +515,7 @@ def copy_configuration():
             response = sigsci.add_integration(config)
 
         if 'message' in response:
-            result = '{{"status": "failed", "message": {}}}'.format(response['message'])
+            result = '{{"status": "failed", "message": "{}"}}'.format(response['message'])
 
     else:
         abort(401)

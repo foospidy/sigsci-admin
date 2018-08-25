@@ -598,10 +598,15 @@ function copy_configuration(type) {
                                   invalid_session();
                                 }
                             }
-                        }).fail(function() {
+                        }).fail(function(xhr) {
+                            response = JSON.parse(xhr.responseText);
                             $.notify({ message: "Copy failed."}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
                         }).done(function(xhr) {
-                            $.notify({ message: "Copy successful."}, { type: "info", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                            if(xhr.status == 'failed') {
+                                $.notify({ message: "Copy failed: " + xhr.message + "." }, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                            } else {
+                                $.notify({ message: "Copy successful."}, { type: "info", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                            }
                         });
                     }
                 }
