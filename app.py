@@ -261,6 +261,25 @@ def get_memberships():
 
     return jsonify(response)
 
+@APP.route('/site_members', methods=['GET'])
+def get_site_members():
+    """
+    Route site members from SigSci API.
+    """
+    if 'username' not in session:
+        abort(401)
+
+    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    sigsci.corp = session['corp']
+    sigsci.site = request.args.get('site', None)
+
+    if 'token' in sigsci.token:
+        response = sigsci.get_site_members()
+    else:
+        abort(401)
+
+    return jsonify(response)
+
 @APP.route('/js/<path:path>')
 def send_js(path):
     """

@@ -572,8 +572,8 @@ function get_users_by_site(corp) {
         $.each(data['data'], function(key, val) {
             //members.push(val.email);
             html += '<div class="row">';
-            html += '<div class="col-sm-4" id="' + val.email + '">' + val.name + ' (<a href="https://dashboard.signalsciences.net/corps/' + corp + '/users/' + val.email + '/edit" target="_new">' + val.email + '</a>)</div>';
-            //html += '<br><div id="memberships-' + val.email + '"></div>';
+            html += '<div class="col-sm-4" id="' + val.name + '">' + val.name + ' (<a href="https://dashboard.signalsciences.net/corps/' + corp + '/sites/' + val.name + '/members" target="_new">' + val.displayName + '</a>)</div>';
+            html += '<br><div id="members-' + val.name + '"></div>';
             html += '</div><br>';
         });
 
@@ -582,20 +582,19 @@ function get_users_by_site(corp) {
         document.getElementById("content").innerHTML = html;
     })
     .done(function(data) {
-        /*
         $.each(data['data'], function(key, val) {
+            var site = val.name;
             $.ajax({
-                url: "/memberships?email=" + val.email
+                url: "/site_members?site=" + site
             })
             .done(function(data) {
                 html = '';
                 $.each(data['data'], function(key, val) {
-                    html += '<div> &nbsp;  &nbsp;  &nbsp; ' + val.site['name'] + '</div>';
+                    html += '<div> &nbsp;  &nbsp;  &nbsp; ' + val.user.name + ' - ' + val.user.email + ' (' + val.role + ')</div>';
                 });
-                document.getElementById("memberships-" + val.email).innerHTML = html;
+                document.getElementById("members-" + site).innerHTML = html;
             });
         });
-        */
     })
     .fail(function() {
         console.log('error');
