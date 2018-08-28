@@ -601,6 +601,48 @@ function get_users_by_site(corp) {
     });
 }
 
+function get_power_rule_packs() {
+    $.ajax({
+        url: "https://raw.githubusercontent.com/foospidy/sigsci-power-rules/master/index.json",
+        statusCode: {
+            401: function() {
+              invalid_session();
+            },
+            404: function () {
+                alert('Github: permission denied.')
+            }
+        }
+    })
+    .done(function(data) {
+        var html = '';
+        
+        html += '<h3 style="margin-left:125px">Power Rules</h3>';
+        //html += '<div style="margin-left:125px">Copy selected to:  <table><tr><td><span id="copy_to_site"></span> </td><td> <input type="button" value="Copy" onclick="copy_configuration(\'integrations\');" class="btn btn-default"></td></tr></table></div>';
+        html += '<br />';
+        html += '<div class="container-fluid" style="margin-left:125px">';
+
+        html += '<div class="row">';
+        html += '<div class="col-sm-4" style="background-color:#DDDDDD"> <input type="checkbox" id="check_all" onchange="toggle_checks()"> Select all<hr></div></div>';
+
+        var obj = JSON.parse(data);
+        $.each(obj['rule-packs'], function(key, val) {
+            html += '<div class="row">';
+            html += '<div class="col-sm-4" style="background-color:#DDDDDD" id="' + val.name + '"> \
+                    <input class="config" type="checkbox" value="' + val.name + '"> <a href="https://github.com/foospidy/sigsci-power-rules/tree/master/power-rules-' + val.name + '" class="edit_rule" target="_new">' + val.display_name + '</a> \
+                    <div>' + val.description + '</div>';
+            html += '</div></div>';
+        });
+
+        html += '</div>';
+
+        document.getElementById("content").innerHTML = html;
+        //get_sites_multi_select(exclude_site=name);
+    })
+    .fail(function() {
+        console.log('error');
+    });
+}
+
 function toggle_tabs(tab_name) {
     var inputs = document.getElementById('tab-list').childNodes;
     for(var i = 0; i < inputs.length; i++) {

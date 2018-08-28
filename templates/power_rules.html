@@ -22,8 +22,8 @@
     <ul class="nav navbar-nav">
       {% if 'username' in session %}
         <li><a href="/">Home</a></li>
-        <li class="active"><a href="/users">Users</a></li>
-        <li><a href="/power_rules">Power Rules</a></li>
+        <li><a href="/users">Users</a></li>
+        <li class="active"><a href="/power_rules">Power Rules</a></li>
         <!-- TODO: <li><a href="#">Health Check</a></li> -->
         <!-- TODO: <li><a href="#">Audit</a></li>-->
         <li><a href="/logout">Logout</a></li>
@@ -33,13 +33,9 @@
 </nav>
   
 <div class="container">
-    <h3>Manage Users</h3>
+    <h3>Power Rules</h3>
     <ul class="nav nav-tabs" id="tab-list">
-        <li id="by_users" class="active"><a href="javascript:get_corp_users('{{ session['corp'] }}');">By Users</a></li>
-        <li id="by_sites"><a href="javascript:get_users_by_site('{{ session['corp'] }}');">By Sites</a></li>
-        <!--
-        <li id="pending_invites"><a href="javascript:">Pending Invites</a></li>
-        -->
+        <li id="by_users" class="active"><a href="javascript:get_power_rule_packs();">Repo</a></li>
       </ul>
 </div>
 <br />

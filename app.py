@@ -410,6 +410,17 @@ def users():
     javascript = 'get_corp_users("' + sigsci.corp + '");'
     return render_template('users.html', javascript=javascript, corp_users=corp_users)
 
+@APP.route('/power_rules')
+def power_rules():
+    """
+    Route for power rules page
+    """
+    if 'username' not in session:
+        abort(401)
+
+    javascript = 'get_power_rule_packs();'
+    return render_template('power_rules.html', javascript=javascript)
+
 @APP.route('/copy_configuration', methods=['POST'])
 def copy_configuration():
     """
