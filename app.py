@@ -5,6 +5,7 @@ import os
 from flask import Flask, session, render_template, request, \
                   redirect, url_for, send_from_directory, abort, jsonify
 from pysigsci import sigsciapi
+from pysigsci import powerrules
 
 APP = Flask(__name__, static_url_path='/static')
 
@@ -420,6 +421,30 @@ def power_rules():
 
     javascript = 'get_power_rule_packs();'
     return render_template('power_rules.html', javascript=javascript)
+
+@APP.route('/deploy_power_rules')
+def deploy_power_rules():
+    """
+    Deploy power rules to site
+    """
+    if 'username' not in session:
+        abort(401)
+
+    target_site = request.args.get('target', None)
+    rulepack = request.args.get('rulepack', None)
+
+    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    sigsci.corp = session['corp']
+    sigsci.site = target_site
+
+    powerrulepack = powerrules.PowerRules()
+
+    if 'token' in sigsci.token:
+        result = powerrulepack.deploy_rulepack(sigsci, rulepack, True)
+    else:
+        abort(401)
+
+    return jsonify(result)
 
 @APP.route('/copy_configuration', methods=['POST'])
 def copy_configuration():

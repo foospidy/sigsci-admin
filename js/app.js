@@ -617,11 +617,11 @@ function get_power_rule_packs() {
         var html = '';
         
         html += '<h3 style="margin-left:125px">Power Rules</h3>';
-        //html += '<div style="margin-left:125px">Copy selected to:  <table><tr><td><span id="copy_to_site"></span> </td><td> <input type="button" value="Copy" onclick="copy_configuration(\'integrations\');" class="btn btn-default"></td></tr></table></div>';
+        html += '<div style="margin-left:125px">Deploy to:  <table><tr><td><span id="copy_to_site"></span> </td><td> <input type="button" value="Deploy" onclick="deploy_power_rule_packs();" class="btn btn-default"></td></tr></table></div>';
         html += '<br />';
-        html += '<div class="container-fluid" style="margin-left:125px">';
+        html += '<div class="container-fluid" style="margin-left:125px; width:100%">';
 
-        html += '<div class="row">';
+        html += '<div class="row" style="width:100%">';
         html += '<div class="col-sm-4" style="background-color:#DDDDDD"> <input type="checkbox" id="check_all" onchange="toggle_checks()"> Select all<hr></div></div>';
 
         var obj = JSON.parse(data);
@@ -636,11 +636,50 @@ function get_power_rule_packs() {
         html += '</div>';
 
         document.getElementById("content").innerHTML = html;
-        //get_sites_multi_select(exclude_site=name);
+        get_sites_multi_select();
     })
     .fail(function() {
         console.log('error');
     });
+}
+
+function deploy_power_rule_packs() {
+    var target_site = '';
+    var site_list = document.getElementsByClassName("site_select");
+
+    for(var i=0; i < site_list.length; i++) {
+        if(site_list[i].tagName == "OPTION" && site_list[i].selected) {
+            target_site = site_list[i].value;
+
+            var inputs = document.getElementsByClassName("config");
+
+            for(var j = 0; j < inputs.length; j++) {
+                if(inputs[j].type == "checkbox" ) {
+                    if(inputs[j].checked) {
+                        $.ajax({
+                            url: "/deploy_power_rules?target=" + target_site + "&rulepack=" + inputs[j].value,
+                            method: "GET",
+                            statusCode: {
+                                401: function() {
+                                  invalid_session();
+                                }
+                            }
+                        }).fail(function(xhr) {
+                            response = JSON.parse(xhr.responseText);
+                            $.notify({ message: "Deploying rule failed."}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                        }).done(function(xhr) {
+                            if(xhr.status == 'failed') {
+                                $.notify({ message: "Deploying rule failed: " + xhr.message + "." }, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                            } else {
+                                $.notify({ message: "Deploying rule successful."}, { type: "info", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
+                            }
+                        });
+                        
+                    }
+                }
+            }
+        }
+    }
 }
 
 function toggle_tabs(tab_name) {

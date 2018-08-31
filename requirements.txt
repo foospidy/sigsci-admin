@@ -5,4 +5,4 @@ certifi
 chardet
 gunicorn
 requests
-pysigsci==1.2.12
+pysigsci==1.3.1
