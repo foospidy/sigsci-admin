@@ -616,7 +616,7 @@ function get_power_rule_packs() {
     .done(function(data) {
         var html = '';
         
-        html += '<h3 style="margin-left:125px">Power Rules</h3>';
+        html += '<h3 style="margin-left:125px">Power Rule Rule Packs</h3>';
         html += '<div style="margin-left:125px">Deploy to:  <table><tr><td><span id="copy_to_site"></span> </td><td> <input type="button" value="Deploy" onclick="deploy_power_rule_packs();" class="btn btn-default"></td></tr></table></div>';
         html += '<br />';
         html += '<div class="container-fluid" style="margin-left:125px; width:100%">';
