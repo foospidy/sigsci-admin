@@ -462,6 +462,45 @@ function get_sites_dropdown(exclude_site) {
     });
 }
 
+function get_sites_dropdown_html(exclude_site) {
+    var html = '';
+
+    $.ajax({
+        url: "/corp_sites",
+        statusCode: {
+            401: function() {
+              invalid_session();
+            }
+        }
+    })
+    .done(function(data) {
+        html += '<div class="dropdown">';
+        html += '<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">';
+        html += '<span id="selected">Change site..</span>';
+        html += '<span class="caret"></span></button>';
+        html += '<ul class="dropdown-menu" id="change_site">';
+
+        sites = [];
+
+        $.each(data['data'], function(key, val) {
+            fields = [val.name, val.displayName];
+            sites.push(fields);
+        });
+
+        sites.sort();
+
+        $.each(sites, function(key, val) {
+            if(exclude_site != val[0]) {
+                html += '<li><a href="/site?name=' + val[0] + '">' + val[1] + '</a></li>';
+            }
+        });
+
+        html += '</ul></div>';
+
+        document.getElementById("site-dropdown").innerHTML = html;
+    });
+}
+
 function get_sites_multi_select(exclude_site) {
     var html = '';
 
@@ -668,7 +707,7 @@ function deploy_power_rule_packs() {
                             response = JSON.parse(xhr.responseText);
                             $.notify({ message: "Deploying rule failed."}, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
                         }).done(function(xhr) {
-                            if(xhr.status == 'failed') {
+                            if(xhr.status == 'failed' || xhr.statusCode == 500) {
                                 $.notify({ message: "Deploying rule failed: " + xhr.message + "." }, { type: "danger", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });
                             } else {
                                 $.notify({ message: "Deploying rule successful."}, { type: "info", animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp"} });

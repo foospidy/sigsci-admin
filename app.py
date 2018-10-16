@@ -390,6 +390,7 @@ def site():
     session['site'] = corp_site['name']
     #$(document).ready(function() {{$("#copy_to_these_sites").multiselect();}});
     javascript = 'get_request_rules("{}", "{}");'.format(session['corp'], name)
+    javascript += 'get_sites_dropdown_html("{}");'.format(name)
     return render_template('site.html', javascript=javascript, display_name=display_name)
 
 @APP.route('/users')
