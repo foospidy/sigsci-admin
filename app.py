@@ -515,7 +515,7 @@ def deploy_power_rules():
 
     powerrulepack = powerrules.PowerRules()
 
-    response = powerrulepack.deploy_rulepack(sigsci, rulepack, True)
+    response = powerrulepack.deploy_rule_pack(sigsci, rulepack, True)
 
     if 'message' in response:
         abort(401)
