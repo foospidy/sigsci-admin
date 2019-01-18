@@ -40,7 +40,10 @@
         <input type="email" class="form-control" id="email" name="email">
       </div>
       <div class="form-group">
-        <label for="pwd">Password:</label>
+        <div class="checkbox">
+          <label><input type="radio" name="secret" value="token" checked> Access Token</label>
+          <label><input type="radio" name="secret" value="password"> Password</label>
+        </div>
         <input type="password" class="form-control" id="password" name="password">
       </div>
       <div class="checkbox">

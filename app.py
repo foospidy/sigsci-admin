@@ -25,12 +25,16 @@ def get_corp_sites():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_corp_sites()
-    else:
+    response = sigsci.get_corp_sites()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -43,13 +47,18 @@ def get_request_rules():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_request_rules()
-    else:
+
+    response = sigsci.get_request_rules()
+
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -62,13 +71,17 @@ def get_signal_rules():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_signal_rules()
-    else:
+    response = sigsci.get_signal_rules()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -81,13 +94,17 @@ def get_templated_rules():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_templated_rules()
-    else:
+    response = sigsci.get_templated_rules()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -100,13 +117,17 @@ def get_advanced_rules():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_advanced_rules()
-    else:
+    response = sigsci.get_advanced_rules()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -119,13 +140,17 @@ def get_rule_lists():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_rule_lists()
-    else:
+    response = sigsci.get_rule_lists()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -138,13 +163,17 @@ def get_custom_signals():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_custom_signals()
-    else:
+    response = sigsci.get_custom_signals()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -157,13 +186,17 @@ def get_custom_alerts():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_custom_alerts()
-    else:
+    response = sigsci.get_custom_alerts()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -176,13 +209,17 @@ def get_redactions():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_redactions()
-    else:
+    response = sigsci.get_redactions()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -195,13 +232,17 @@ def get_header_links():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_header_links()
-    else:
+    response = sigsci.get_header_links()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -214,13 +255,17 @@ def get_integrations():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('name', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_integrations()
-    else:
+    response = sigsci.get_integrations()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -233,12 +278,16 @@ def get_corp_users():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_corp_users()
-    else:
+    response = sigsci.get_corp_users()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -251,13 +300,17 @@ def get_memberships():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     email = request.args.get('email', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_memberships(email)
-    else:
+    response = sigsci.get_memberships(email)
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -270,13 +323,17 @@ def get_site_members():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = request.args.get('site', None)
 
-    if 'token' in sigsci.token:
-        response = sigsci.get_site_members()
-    else:
+    response = sigsci.get_site_members()
+    
+    if 'message' in response:
         abort(401)
 
     return jsonify(response)
@@ -301,30 +358,41 @@ def login():
     Route for login
     """
     email = request.form.get('email', None)
+    secret = request.form.get('secret', None)
     password = request.form.get('password', None)
-    sigsci = sigsciapi.SigSciApi(email, password)
 
+    session['secret'] = secret
     result = "False"
 
-    if 'token' in sigsci.token:
-        result = "True"
+    if secret == "token":
+        sigsci = sigsciapi.SigSciApi(email=email, api_token=password)
+    else:
+        sigsci = sigsciapi.SigSciApi(email=email, password=password)
 
-        sigsci.corp = sigsci.get_corps()['data'][0]['name']
+        if 'token' not in sigsci.bearer_token:
+            abort(401)
+    print(sigsci.api_user)
+    print(sigsci.api_token)
+    corps = sigsci.get_corps()
+    if 'message' in corps:
+        abort(403)
+    
+    sigsci.corp = corps['data'][0]['name']
+    
+    user = sigsci.get_corp_user(email)
+    if 'message' in user:
+        abort(403)
 
-        user = sigsci.get_corp_user(email)
+    result = "True"
+    session['username'] = email
+    session['password'] = password
+    session['corp'] = sigsci.corp
+    session['name'] = user['name']
+    session['role'] = user['role']
 
-        if 'message' in user:
-            abort(403)
-        else:
-            session['username'] = email
-            session['password'] = password
-            session['corp'] = sigsci.corp
-            session['name'] = user['name']
-            session['role'] = user['role']
+    return redirect(url_for('default'))
 
-        return redirect(url_for('default'))
-
-    return render_template('index.html', result=result)
+ #   return render_template('index.html', result=result)
 
 @APP.route('/logout')
 def logout():
@@ -378,12 +446,16 @@ def site():
     name = request.args.get('name', None)
     display_name = ''
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
 
-    if 'token' in sigsci.token:
-        corp_site = sigsci.get_corp_site(name)
-    else:
+    corp_site = sigsci.get_corp_site(name)
+    
+    if 'message' in corp_site:
         abort(401)
 
     display_name = corp_site['displayName']
@@ -401,12 +473,16 @@ def users():
     if 'username' not in session:
         abort(401)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
 
-    if 'token' in sigsci.token:
-        corp_users = sigsci.get_corp_users()
-    else:
+    corp_users = sigsci.get_corp_users()
+    
+    if 'message' in corp_users:
         abort(401)
 
     javascript = 'get_corp_users("' + sigsci.corp + '");'
@@ -434,18 +510,22 @@ def deploy_power_rules():
     target_site = request.args.get('target', None)
     rulepack = request.args.get('rulepack', None)
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = target_site
 
     powerrulepack = powerrules.PowerRules()
 
-    if 'token' in sigsci.token:
-        result = powerrulepack.deploy_rulepack(sigsci, rulepack, True)
-    else:
+    response = powerrulepack.deploy_rulepack(sigsci, rulepack, True)
+    
+    if 'message' in response:
         abort(401)
 
-    return jsonify(result)
+    return jsonify(response)
 
 @APP.route('/copy_configuration', methods=['POST'])
 def copy_configuration():
@@ -459,122 +539,122 @@ def copy_configuration():
     target_site = request.args.get('target', None)
     config_data = None
 
-    sigsci = sigsciapi.SigSciApi(session['username'], session['password'])
+    if session['secret'] == "token":
+        sigsci = sigsciapi.SigSciApi(email=session['username'], api_token=session['password'])
+    else:
+        sigsci = sigsciapi.SigSciApi(email=session['username'], password=session['password'])
+
     sigsci.corp = session['corp']
     sigsci.site = session['site']
 
-    if 'token' in sigsci.token:
-        result = '{ "status": "success" }'
-        identifier = request.form.get('identifier', None)
+    result = '{ "status": "success" }'
+    identifier = request.form.get('identifier', None)
 
-        if config_type == 'request_rules':
-            config_data = sigsci.get_request_rules()
-        elif config_type == 'signal_rules':
-            config_data = sigsci.get_signal_rules()
-        elif config_type == 'templated_rules':
-            config_data = sigsci.get_templated_rules()
-        elif config_type == 'advanced_rules':
-            config_data = sigsci.get_advanced_rules()
-        elif config_type == 'rule_lists':
-            config_data = sigsci.get_rule_lists()
-        elif config_type == 'custom_signals':
-            config_data = sigsci.get_custom_signals()
-        elif config_type == 'custom_alerts':
-            config_data = sigsci.get_custom_alerts()
-        elif config_type == 'redactions':
-            config_data = sigsci.get_redactions()
-        elif config_type == 'header_links':
-            config_data = sigsci.get_header_links()
-        elif config_type == 'integrations':
-            config_data = sigsci.get_integrations()
+    if config_type == 'request_rules':
+        config_data = sigsci.get_request_rules()
+    elif config_type == 'signal_rules':
+        config_data = sigsci.get_signal_rules()
+    elif config_type == 'templated_rules':
+        config_data = sigsci.get_templated_rules()
+    elif config_type == 'advanced_rules':
+        config_data = sigsci.get_advanced_rules()
+    elif config_type == 'rule_lists':
+        config_data = sigsci.get_rule_lists()
+    elif config_type == 'custom_signals':
+        config_data = sigsci.get_custom_signals()
+    elif config_type == 'custom_alerts':
+        config_data = sigsci.get_custom_alerts()
+    elif config_type == 'redactions':
+        config_data = sigsci.get_redactions()
+    elif config_type == 'header_links':
+        config_data = sigsci.get_header_links()
+    elif config_type == 'integrations':
+        config_data = sigsci.get_integrations()
 
-        if 'data' in config_data:
-            if config_type != 'templated_rules':
-                for config in config_data['data']:
+    if 'data' in config_data:
+        if config_type != 'templated_rules':
+            for config in config_data['data']:
 
-                    if 'id' not in config:
-                         # a bit of a hack for objects that don't have an id
-                        config['id'] = config['tagName']
+                if 'id' not in config:
+                        # a bit of a hack for objects that don't have an id
+                    config['id'] = config['tagName']
 
-                    if identifier == config['id']:
-                        # this is the config we want, break out of loop
-                        # disable config before copying
-                        config['enabled'] = False
+                if identifier == config['id']:
+                    # this is the config we want, break out of loop
+                    # disable config before copying
+                    config['enabled'] = False
 
-                        if 'id' in config:
-                            del config['id']
-                        if 'updated' in config:
-                            del config['updated']
-                        if 'created' in config:
-                            del config['created']
-                        if 'createdBy' in config:
-                            del config['createdBy']
-                        break
-            else:
-                # handle structure for templated rules
-                # prep and build payload
-                payload = {
-                    'alertAdds': [],
-                    'alertDeletes': [],
-                    'alertUpdates': [],
-                    'detectionAdds': [],
-                    'detectionDeletes': [],
-                    'detectionUpdates': []}
-
-                # let's gather up the detections
-                for config in config_data['data']:
-                    for detection in config['detections']:
-                        if identifier == config['name']:
-                            # this is the signal we want
-                            # disable rule before copying
-                            detection_add = {'name':detection['name'], 'enabled':False,
-                                             'fields':detection['fields']}
-                            payload['detectionAdds'].append(detection_add)
-
-                for config in config_data['data']:
-                    for alert in config['alerts']:
-                        if identifier == alert['tagName']:
-                            # this is the signal we want
-                            # disable rule before copying
-                            alert_add = {'action':alert['action'], 'enabled':False,
-                                         'interval':alert['interval'],
-                                         'skipNotifications':alert['skipNotifications'],
-                                         'longName':alert['longName'],
-                                         'threshold':alert['threshold']}
-                            payload['alertAdds'].append(alert_add)
-
+                    if 'id' in config:
+                        del config['id']
+                    if 'updated' in config:
+                        del config['updated']
+                    if 'created' in config:
+                        del config['created']
+                    if 'createdBy' in config:
+                        del config['createdBy']
+                    break
         else:
-            config = config_data
+            # handle structure for templated rules
+            # prep and build payload
+            payload = {
+                'alertAdds': [],
+                'alertDeletes': [],
+                'alertUpdates': [],
+                'detectionAdds': [],
+                'detectionDeletes': [],
+                'detectionUpdates': []}
 
-        # copy config to target site
-        sigsci.site = target_site
+            # let's gather up the detections
+            for config in config_data['data']:
+                for detection in config['detections']:
+                    if identifier == config['name']:
+                        # this is the signal we want
+                        # disable rule before copying
+                        detection_add = {'name':detection['name'], 'enabled':False,
+                                            'fields':detection['fields']}
+                        payload['detectionAdds'].append(detection_add)
 
-        if config_type == 'request_rules':
-            response = sigsci.add_request_rules(config)
-        elif config_type == 'signal_rules':
-            response = sigsci.add_signal_rules(config)
-        elif config_type == 'templated_rules':
-            response = sigsci.add_templated_rules(identifier, payload)
-        elif config_type == 'advanced_rules':
-            response = sigsci.add_advanced_rules(config)
-        elif config_type == 'rule_lists':
-            response = sigsci.add_rule_lists(config)
-        elif config_type == 'custom_signals':
-            response = sigsci.add_custom_signals(config)
-        elif config_type == 'custom_alerts':
-            response = sigsci.add_custom_alert(config)
-        elif config_type == 'redactions':
-            response = sigsci.add_redactions(config)
-        elif config_type == 'header_links':
-            response = sigsci.add_header_links(config)
-        elif config_type == 'integrations':
-            response = sigsci.add_integration(config)
-
-        if 'message' in response:
-            result = '{{"status": "failed", "message": "{}"}}'.format(response['message'])
+            for config in config_data['data']:
+                for alert in config['alerts']:
+                    if identifier == alert['tagName']:
+                        # this is the signal we want
+                        # disable rule before copying
+                        alert_add = {'action':alert['action'], 'enabled':False,
+                                        'interval':alert['interval'],
+                                        'skipNotifications':alert['skipNotifications'],
+                                        'longName':alert['longName'],
+                                        'threshold':alert['threshold']}
+                        payload['alertAdds'].append(alert_add)
 
     else:
-        abort(401)
+        config = config_data
+
+    # copy config to target site
+    sigsci.site = target_site
+
+    if config_type == 'request_rules':
+        response = sigsci.add_request_rules(config)
+    elif config_type == 'signal_rules':
+        response = sigsci.add_signal_rules(config)
+    elif config_type == 'templated_rules':
+        response = sigsci.add_templated_rules(identifier, payload)
+    elif config_type == 'advanced_rules':
+        response = sigsci.add_advanced_rules(config)
+    elif config_type == 'rule_lists':
+        response = sigsci.add_rule_lists(config)
+    elif config_type == 'custom_signals':
+        response = sigsci.add_custom_signals(config)
+    elif config_type == 'custom_alerts':
+        response = sigsci.add_custom_alert(config)
+    elif config_type == 'redactions':
+        response = sigsci.add_redactions(config)
+    elif config_type == 'header_links':
+        response = sigsci.add_header_links(config)
+    elif config_type == 'integrations':
+        response = sigsci.add_integration(config)
+
+    if 'message' in response:
+        result = '{{"status": "failed", "message": "{}"}}'.format(response['message'])
 
     return result
 
