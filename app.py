@@ -33,7 +33,7 @@ def get_corp_sites():
     sigsci.corp = session['corp']
 
     response = sigsci.get_corp_sites()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -80,7 +80,7 @@ def get_signal_rules():
     sigsci.site = request.args.get('name', None)
 
     response = sigsci.get_signal_rules()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -103,7 +103,7 @@ def get_templated_rules():
     sigsci.site = request.args.get('name', None)
 
     response = sigsci.get_templated_rules()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -126,7 +126,7 @@ def get_advanced_rules():
     sigsci.site = request.args.get('name', None)
 
     response = sigsci.get_advanced_rules()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -149,7 +149,7 @@ def get_rule_lists():
     sigsci.site = request.args.get('name', None)
 
     response = sigsci.get_rule_lists()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -172,7 +172,7 @@ def get_custom_signals():
     sigsci.site = request.args.get('name', None)
 
     response = sigsci.get_custom_signals()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -195,7 +195,7 @@ def get_custom_alerts():
     sigsci.site = request.args.get('name', None)
 
     response = sigsci.get_custom_alerts()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -218,7 +218,7 @@ def get_redactions():
     sigsci.site = request.args.get('name', None)
 
     response = sigsci.get_redactions()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -241,7 +241,7 @@ def get_header_links():
     sigsci.site = request.args.get('name', None)
 
     response = sigsci.get_header_links()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -264,7 +264,7 @@ def get_integrations():
     sigsci.site = request.args.get('name', None)
 
     response = sigsci.get_integrations()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -286,7 +286,7 @@ def get_corp_users():
     sigsci.corp = session['corp']
 
     response = sigsci.get_corp_users()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -309,7 +309,7 @@ def get_memberships():
     email = request.args.get('email', None)
 
     response = sigsci.get_memberships(email)
-    
+
     if 'message' in response:
         abort(401)
 
@@ -332,7 +332,7 @@ def get_site_members():
     sigsci.site = request.args.get('site', None)
 
     response = sigsci.get_site_members()
-    
+
     if 'message' in response:
         abort(401)
 
@@ -362,7 +362,6 @@ def login():
     password = request.form.get('password', None)
 
     session['secret'] = secret
-    result = "False"
 
     if secret == "token":
         sigsci = sigsciapi.SigSciApi(email=email, api_token=password)
@@ -371,19 +370,17 @@ def login():
 
         if 'token' not in sigsci.bearer_token:
             abort(401)
-    print(sigsci.api_user)
-    print(sigsci.api_token)
+
     corps = sigsci.get_corps()
     if 'message' in corps:
         abort(403)
-    
+
     sigsci.corp = corps['data'][0]['name']
-    
+
     user = sigsci.get_corp_user(email)
     if 'message' in user:
         abort(403)
 
-    result = "True"
     session['username'] = email
     session['password'] = password
     session['corp'] = sigsci.corp
@@ -391,8 +388,6 @@ def login():
     session['role'] = user['role']
 
     return redirect(url_for('default'))
-
- #   return render_template('index.html', result=result)
 
 @APP.route('/logout')
 def logout():
@@ -454,7 +449,7 @@ def site():
     sigsci.corp = session['corp']
 
     corp_site = sigsci.get_corp_site(name)
-    
+
     if 'message' in corp_site:
         abort(401)
 
@@ -481,7 +476,7 @@ def users():
     sigsci.corp = session['corp']
 
     corp_users = sigsci.get_corp_users()
-    
+
     if 'message' in corp_users:
         abort(401)
 
@@ -521,7 +516,7 @@ def deploy_power_rules():
     powerrulepack = powerrules.PowerRules()
 
     response = powerrulepack.deploy_rulepack(sigsci, rulepack, True)
-    
+
     if 'message' in response:
         abort(401)
 
@@ -610,8 +605,11 @@ def copy_configuration():
                     if identifier == config['name']:
                         # this is the signal we want
                         # disable rule before copying
-                        detection_add = {'name':detection['name'], 'enabled':False,
-                                            'fields':detection['fields']}
+                        detection_add = {
+                            'name':detection['name'],
+                            'enabled':False,
+                            'fields':detection['fields']
+                        }
                         payload['detectionAdds'].append(detection_add)
 
             for config in config_data['data']:
@@ -619,11 +617,14 @@ def copy_configuration():
                     if identifier == alert['tagName']:
                         # this is the signal we want
                         # disable rule before copying
-                        alert_add = {'action':alert['action'], 'enabled':False,
-                                        'interval':alert['interval'],
-                                        'skipNotifications':alert['skipNotifications'],
-                                        'longName':alert['longName'],
-                                        'threshold':alert['threshold']}
+                        alert_add = {
+                            'action':alert['action'],
+                            'enabled':False,
+                            'interval':alert['interval'],
+                            'skipNotifications':alert['skipNotifications'],
+                            'longName':alert['longName'],
+                            'threshold':alert['threshold']
+                        }
                         payload['alertAdds'].append(alert_add)
 
     else:
