@@ -12,7 +12,9 @@ Pull requests are welcomed.
 
 ### Hosted
 
-https://sigsci-admin.herokuapp.com
+Hosted instance no longer available
+
+~~hxxps://sigsci-admin.herokuapp.com~~ 
 
 ### Install Local
 
